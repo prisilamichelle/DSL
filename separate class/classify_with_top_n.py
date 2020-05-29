@@ -73,18 +73,13 @@ def average(vector, s2v, word, aspect, opinion, neg):
     concatenated_vector = np.concatenate((vector, averaged_vector))
     return concatenated_vector
 
-scoring = {'accuracy' : make_scorer(accuracy_score),
-           'f1_score_aspect' : make_scorer(f1_score, average=None, labels=[1]),
-           'f1_score_negative' : make_scorer(f1_score, average=None, labels=[0]),
-           'f1_score_opinion' : make_scorer(f1_score, average=None, labels=[-1])}
-
 name = input('Please input domain name (camera/hp/resto) : ')
-folder = input('Please input folder name :')
+folder = input('Please input embedding folder name :')
 selection_mode = 'SVM' if int(input('SVM? ')) == 1 else 'Similarity' 
 if selection_mode == 'SVM':
     mode = 'Concatenated Word Vector' if int(input('Concatenate? ')) == 1 else 'Word Vector'
-n = int(input('Insert N : '))
-text_file = open('{}/{}sentences.s2v'.format(folder, name), 'r')
+n = int(input('Insert N (max 1000): '))
+text_file = open('{}/cleaned-{}.s2v'.format(folder, name), 'r')
 corpus = text_file.read()
 text_file.close()
 
@@ -92,14 +87,14 @@ word_counter = Counter(corpus.split())
 most_common = word_counter.most_common(n)
 most_common = [pair[0] for pair in most_common]
 
-pos_train_aspect = [line.rstrip() for line in open('{}/train-aspect-{}'.format(folder, name), 'r')]
-pos_train_opinion = [line.rstrip() for line in open('{}/train-opinion-{}'.format(folder, name), 'r')]
-neg_train_example = [line.rstrip() for line in open('{}/train-neg-{}'.format(folder, name), 'r')]
-pos_aspect = [line.rstrip() for line in open('{}/aspect-{}'.format(folder, name), 'r')]
+pos_train_aspect = [line.rstrip() for line in open('labelled data/{}/train-aspect-{}'.format(name, name), 'r')]
+pos_train_opinion = [line.rstrip() for line in open('labelled data/{}/train-opinion-{}'.format(name, name), 'r')]
+neg_train_example = [line.rstrip() for line in open('labelled data/{}/train-neg-{}'.format(name, name), 'r')]
+pos_aspect = [line.rstrip() for line in open('labelled data/{}/aspect-{}'.format(name, name), 'r')]
 pos_aspect = [word for word in pos_aspect if word in most_common]
-pos_opinion = [line.rstrip() for line in open('{}/opinion-{}'.format(folder, name), 'r')]
+pos_opinion = [line.rstrip() for line in open('labelled data/{}/opinion-{}'.format(name, name), 'r')]
 pos_opinion = [word for word in pos_opinion if word in most_common]
-neg_example = [line.rstrip() for line in open('{}/neg-{}'.format(folder, name), 'r')]
+neg_example = [line.rstrip() for line in open('labelled data/{}/neg-{}'.format(name, name), 'r')]
 neg_example = [word for word in neg_example if word in most_common]
 
 s2v = Sense2Vec().from_disk(folder)

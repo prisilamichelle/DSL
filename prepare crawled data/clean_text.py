@@ -53,4 +53,4 @@ sentences = list(filter(None, sentences))
 output_file_name = input("Please enter the output file name : ")
 with open(output_file_name,"w") as f:
     for sentence in sentences:
-        file.write(sentence + '\n')
+        f.write(sentence + '\n')

@@ -8,7 +8,7 @@ from collections import Counter
 from sklearn.preprocessing import Normalizer
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
-folder = input('Insert folder : ')
+folder = input('Insert embedding folder : ')
 name = input('Insert domain : ')
 top_n = int(input('Insert N (top) : '))
 most_similar_n = int(input('Insert n (most similar) : '))
@@ -16,10 +16,10 @@ selection_mode = 'SVM' if int(input('SVM? ')) == 1 else 'Similarity'
 if selection_mode == 'SVM':
     mode = 'Concatenated Word Vector' if int(input('Concatenate? ')) == 1 else 'Word Vector' 
 
-pos_aspect = [line.rstrip() for line in open('{}/full-aspect-{}'.format(folder, name), 'r')]
-pos_opinion = [line.rstrip() for line in open('{}/full-opinion-{}'.format(folder, name), 'r')]
-neg_example = [line.rstrip() for line in open('{}/full-neg-{}'.format(folder, name), 'r')]
-text_file = open('{}/{}sentences.s2v'.format(folder, name), 'r')
+pos_aspect = [line.rstrip() for line in open('labelled data/{}/full-aspect-{}'.format(name, name), 'r')]
+pos_opinion = [line.rstrip() for line in open('labelled data/{}/full-opinion-{}'.format(name, name), 'r')]
+neg_example = [line.rstrip() for line in open('labelled data/{}/full-neg-{}'.format(name, name), 'r')]
+text_file = open('{}/cleaned-{}.s2v'.format(folder, name), 'r')
 corpus = text_file.read()
 text_file.close()
 
@@ -96,7 +96,7 @@ if selection_mode == 'SVM':
             pickle.dump(opinion_list, opinion_file)
             print()
     else:
-        print("Model hasn't been trained yet.")
+        print("Model hasn't been trained yet. Please train it using classify_with_top_n.py first")
 
 else:
     aspects, opinions, negs, y_predict, y_test = [], [], [], [], []

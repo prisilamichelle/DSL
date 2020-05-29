@@ -18,20 +18,6 @@ def clean_token(text):
                     if re.search('\d', l[0]).span()[0] != 0:
                         l[0] = l[0].lower()
                         words.append('|'.join(l))
-                    else:
-                        print(l)
-            else:
-                if l[1] in ['FAC', 'LOC']:
-                    print(l)
-                # elif '_'
-                # if has_number != None and '_' not in l[0]:
-                #     if re.search('\d', l[0]).span()[0] != 0:
-                #         l[0] = l[0].lower()
-                #         words.append('|'.join(l))
-                #     else:
-                #         print(l)
-                # else:
-                   
         sentences.append(' '.join(words))
     sentences = list(filter(None, sentences))
     text = '\n'.join(sentences)
@@ -44,11 +30,9 @@ def replace_contractions(text):
     text = text.replace("ca|VERB", "can|VERB")
     return text
 
-domain = input('Insert domain : ')
-folder = input('Insert folder : ')
+filename = input('Insert filename : ')
 # read s2v
-# with open('j'.format(domain, domain), 'r') as in_file:
-with open('{}/{}sentences.s2v'.format(folder, domain), 'r') as in_file:
+with open(filename, 'r') as in_file:
     text = in_file.read()
 # replace contractions
 text = replace_contractions(text)
@@ -56,6 +40,5 @@ text = replace_contractions(text)
 text = clean_token(text) 
 
 # output fixed s2v
-# with open('{}_new/{}sentencesnew.s2v'.format(domain, domain), 'w') as out_file:
-with open('{}/{}sentences.s2v'.format(folder, domain), 'w') as out_file:
+with open(filename, 'w') as out_file:
     out_file.write(text)

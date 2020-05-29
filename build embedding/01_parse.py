@@ -37,7 +37,7 @@ def get_adjective_phrases(doc):
 
 def get_noun_phrases(doc, wn_lemmas, special_ents):
   noun = []
-  print('NOUN CHUNKS : ', list(doc.noun_chunks))
+  # print('NOUN CHUNKS : ', list(doc.noun_chunks))
   for np in doc.noun_chunks:
     if len(np) >= 2:
       pos = [token.pos_ for token in np]
@@ -50,8 +50,8 @@ def get_noun_phrases(doc, wn_lemmas, special_ents):
           # print(np.text)
           i = 0
           pos_element = pos[i]
-          if 'X' in pos:
-            print('X warning ' + np.text + str([token.pos_ for token in np]) + str([token.dep_ for token in np]))
+          # if 'X' in pos:
+          #   print('X warning ' + np.text + str([token.pos_ for token in np]) + str([token.dep_ for token in np]))
 
           while pos_element in ['X', 'CCONJ', 'SCONJ', 'DET', 'PUNCT']:
             if pos_element == 'X':
@@ -86,14 +86,14 @@ def get_noun_phrases(doc, wn_lemmas, special_ents):
               lexname_synsets = [synset.name().split('.')[0] + ' ' + synset.lexname() for synset in synsets]
               if common_member(pos_synsets, ['v', 'n']):
                 noun.append(np)
-                print(lexname_synsets)
-                print('BY SYNSETS ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
+                # print(lexname_synsets)
+                # print('BY SYNSETS ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
             # elif '_' in np[0].text:
               # noun.append(np)
               # print('BY PHRASE ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
             else:
-              if np[0].dep_ == 'amod':
-                print('AMOD ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
+              # if np[0].dep_ == 'amod':
+              #   print('AMOD ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
               
               wnl = WordNetLemmatizer()
               joined_phrase = '_'.join(np.text.split())
@@ -120,16 +120,16 @@ def get_noun_phrases(doc, wn_lemmas, special_ents):
                   else:
                     if np[0].pos_ in ['PROPN']:
                       noun.append(np)
-                      print('PROPN ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
+                      # print('PROPN ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
                     # else:
                         # print('ADJ REMOVED ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
                 # else:
                   # print('NOT IN WORDNET ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
-          else:
-            if has_number != None:
-              print('NUMBER ALERT ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
-        else:
-          print('WEIRD PHRASE ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
+          # else:
+          #   if has_number != None:
+          #     print('NUMBER ALERT ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
+        # else:
+        #   print('WEIRD PHRASE ' + np.text + str([token.pos_ for token in np]) + str([token.tag_ for token in np]) + str([token.dep_ for token in np]))
   # print('NOUN : ', str(noun))
   return noun
 
@@ -160,7 +160,7 @@ def get_phrases(doc: Doc, wn_lemmas) -> List[Span]:
         elif ent.label_ in ['WORK_OF_ART', 'LAW', 'EVENT', 'LANGUAGE', 'PRODUCT', 'ORG', 'NORP', 'FAC', 'LOC']:
             # print('ENT REMOVED', ent.text, ent.label_)
             entities.remove(ent)
-    print('ENT WORDS ', entities)
+    # print('ENT WORDS ', entities)
     # print('NORP : ', norp)
     # b = len(entities)
     # if a != b:
@@ -236,15 +236,15 @@ def main(in_file, out_dir, spacy_model="en_core_web_sm", n_process=1):
     wn_lemmas = set(wordnet.all_lemma_names())
     with output_file.open("w", encoding="utf8") as f:
         for doc in tqdm.tqdm(docs, desc="Docs", unit=""):
-            print(doc)
+            # print(doc)
             spans = get_phrases(doc, wn_lemmas)
             spans = filter_spans(spans)
-            print('NOUN SPAN', str(spans))
+            # print('NOUN SPAN', str(spans))
             doc = merge_phrases(doc, spans)
             spans = get_adjective_phrases(doc)
             spans = filter_spans(spans)
-            print('ADJ SPAN', str(spans))
-            print('*-----------------------------------------*')
+            # print('ADJ SPAN', str(spans))
+            # print('*-----------------------------------------*')
             doc = merge_phrases(doc, spans)
             words = []
             for token in doc:
